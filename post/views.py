@@ -1,3 +1,5 @@
+from genericpath import exists
+import pstats
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions, status
@@ -27,5 +29,14 @@ class JobView(APIView):
         job_type = int( request.data.get("job_type", None) )
         company_name = request.data.get("company_name", None)
 
-        return Response(status=status.HTTP_200_OK)
+        if job_type is not None:
+            return Response(status=status.HTTP_200_OK)
+
+        elif company_name is None:
+            Company.objects.create(company_name=company_name)
+
+            return Response(status=status.HTTP_200_OK)
+
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
